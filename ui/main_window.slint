@@ -1,6 +1,40 @@
+import { Button } from "std-widgets.slint";
+
 export component MainWindow inherits Window {
-    Text {
-        text: "hello world";
-        color: green;
+    min-height: 200px;
+    min-width: 200px;
+    GridLayout {
+        padding: 10px;
+        spacing: 10px;
+        Button {
+            text: "Button 1";
+            col: 0;
+            row: 0;
+        }
+        Button {
+            text: "Button 1";
+            col: 0;
+            row: 1;
+        }
+        Button {
+            text: "Button 1";
+            col: 0;
+            row: 2;
+        }
+        Text {
+            min-width: 16px;
+            min-height: 16px;
+            text: "Total Cash Balance";
+            row: 0;
+            col: 1;
+            rowspan: 3;
+            colspan: 3;
+        }
+        Rectangle {
+            background: gray;
+            row: 3;
+            col: 0;
+            colspan: 4;
+        }
     }
 }
