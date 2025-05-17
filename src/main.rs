@@ -1,11 +1,4 @@
-slint::slint! {
-    export component MainWindow inherits Window {
-        Text {
-            text: "hello world";
-            color: green;
-        }
-    }
-}
+slint::include_modules!();
 
 fn main() {
     let main_window: MainWindow = match MainWindow::new() {
