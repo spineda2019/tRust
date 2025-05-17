@@ -6,7 +6,7 @@ fn main() {
         Err(_) => todo!(),
     };
 
-    if let Err(e) = main_window.run() {
+    if let Err(_e) = main_window.run() {
         todo!();
     }
 }
