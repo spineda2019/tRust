@@ -12,6 +12,7 @@ pub struct Ledger {
 
 impl Ledger {
     pub fn new(weak_handle: Weak<MainWindow>) -> Result<Ledger, Box<dyn Error>> {
+        // TODO: load existing if found, otherwise offer to make new one
         let exe_path: PathBuf = std::env::current_exe()?;
         let exe_dir: &Path = match exe_path.parent() {
             Some(parent) => parent,
