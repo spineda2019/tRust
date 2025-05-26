@@ -1,18 +1,30 @@
 import { Button, StandardButton } from "std-widgets.slint";
 
 export component TodoPopup inherits Window {
+    height: 150px;
     in-out property <bool> popup_visible;
     callback hide_todo_popup();
 
-    Text {
-        text: "Unimplemented Feature";
-        color: black;
-    }
+    GridLayout {
+        spacing: 15px;
+        padding: 50px;
 
-    StandardButton {
-        kind: ok;
-        clicked => {
-            hide_todo_popup();
+        Text {
+            text: "Unimplemented Feature";
+            color: black;
+            row: 0;
+            rowspan: 3;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+
+        StandardButton {
+            kind: ok;
+            row: 3;
+            rowspan: 1;
+            clicked => {
+                hide_todo_popup();
+            }
         }
     }
 }
