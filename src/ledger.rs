@@ -19,7 +19,7 @@ impl Ledger {
         };
         let conf_path: PathBuf = exe_dir.join("trust.toml");
 
-        let file: File = File::open(conf_path)?;
+        // let file: File = File::open(conf_path)?;
 
         Ok(Ledger {
             main_window_handle: weak_handle,
