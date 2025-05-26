@@ -3,7 +3,7 @@ slint::include_modules!();
 fn main() {
     let main_window: MainWindow = match MainWindow::new() {
         Ok(w) => w,
-        Err(_) => todo!(),
+        Err(_e) => todo!(),
     };
 
     let todo_popup: TodoPopup = match TodoPopup::new() {
@@ -11,9 +11,19 @@ fn main() {
         Err(_e) => todo!(),
     };
 
+    let todo_popup_handle = todo_popup.as_weak();
+    let todo_popup_handle_copy = todo_popup_handle.clone();
+
     main_window.on_show_todo_popup(move || {
-        todo_popup.run();
-        todo_popup.set_popup_visible(true);
+        if let Some(handle) = todo_popup_handle.upgrade() {
+            let _ = handle.run();
+        }
+    });
+
+    todo_popup.on_hide_todo_popup(move || {
+        if let Some(handle) = todo_popup_handle_copy.upgrade() {
+            let _ = handle.hide();
+        }
     });
 
     if let Err(_e) = main_window.run() {

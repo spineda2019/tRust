@@ -2,23 +2,18 @@ import { Button, StandardButton } from "std-widgets.slint";
 
 export component TodoPopup inherits Window {
     in-out property <bool> popup_visible;
-    popup := Dialog {
-        Rectangle {
-            Text {
-                text: "Unimplemented Feature";
-                padding: 15px;
-            }
+    callback hide_todo_popup();
 
-            StandardButton {
-                kind: ok;
-                clicked => {
-                    popup_visible = false;
-                }
-                padding: 15px;
-            }
+    Text {
+        text: "Unimplemented Feature";
+        color: black;
+    }
+
+    StandardButton {
+        kind: ok;
+        clicked => {
+            hide_todo_popup();
         }
-
-        visible: popup_visible;
     }
 }
 
@@ -38,8 +33,6 @@ export component MainWindow inherits Window {
                     show_todo_popup();
                 }
             }
-
-            MenuSeparator { }
         }
 
         Menu {
