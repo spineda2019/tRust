@@ -1,16 +1,16 @@
 slint::include_modules!();
 
-fn main() {
-    let main_window: MainWindow = match MainWindow::new() {
-        Ok(w) => w,
-        Err(_e) => todo!(),
-    };
+mod ledger;
 
-    let todo_popup: TodoPopup = match TodoPopup::new() {
-        Ok(tp) => tp,
-        Err(_e) => todo!(),
-    };
+use ledger::Ledger;
+use std::error::Error;
 
+fn main() -> Result<(), Box<dyn Error>> {
+    /* ******************** Up Front Window Construction ******************** */
+    let main_window: MainWindow = MainWindow::new()?;
+    let todo_popup: TodoPopup = TodoPopup::new()?;
+
+    /* ******************* Simple Popup Event Registration ****************** */
     let todo_popup_handle = todo_popup.as_weak();
     main_window.on_show_todo_popup(move || {
         if let Some(handle) = todo_popup_handle.upgrade() {
@@ -25,7 +25,9 @@ fn main() {
         }
     });
 
-    if let Err(_e) = main_window.run() {
-        todo!();
-    }
+    /* **************** Real Work + Attempt Loading From Disk *************** */
+
+    let ledger: Ledger = Ledger::new(main_window.as_weak())?;
+
+    Ok(main_window.run()?)
 }

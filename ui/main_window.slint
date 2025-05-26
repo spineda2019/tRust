@@ -30,9 +30,11 @@ export component TodoPopup inherits Window {
 }
 
 export component MainWindow inherits Window {
-    min-height: 200px;
-    min-width: 200px;
+    min-height: 250px;
+    min-width: 800px;
     title: "tRust";
+
+    in property <string> balance;
 
     callback show_todo_popup();
 
@@ -82,10 +84,21 @@ export component MainWindow inherits Window {
         Text {
             min-width: 16px;
             min-height: 16px;
+            horizontal-alignment: center;
             text: "Total Cash Balance";
+            font-weight: 1000;
             row: 0;
             col: 1;
-            rowspan: 3;
+            colspan: 3;
+        }
+
+        Text {
+            min-width: 16px;
+            min-height: 16px;
+            horizontal-alignment: center;
+            text: balance;
+            row: 1;
+            col: 1;
             colspan: 3;
         }
 
