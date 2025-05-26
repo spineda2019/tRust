@@ -12,16 +12,15 @@ fn main() {
     };
 
     let todo_popup_handle = todo_popup.as_weak();
-    let todo_popup_handle_copy = todo_popup_handle.clone();
-
     main_window.on_show_todo_popup(move || {
         if let Some(handle) = todo_popup_handle.upgrade() {
             let _ = handle.run();
         }
     });
 
+    let todo_popup_handle = todo_popup.as_weak();
     todo_popup.on_hide_todo_popup(move || {
-        if let Some(handle) = todo_popup_handle_copy.upgrade() {
+        if let Some(handle) = todo_popup_handle.upgrade() {
             let _ = handle.hide();
         }
     });
