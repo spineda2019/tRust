@@ -1,9 +1,57 @@
-import { Button } from "std-widgets.slint";
+import { Button, StandardButton } from "std-widgets.slint";
+
+export component TodoPopup inherits Window {
+    in-out property <bool> popup_visible;
+    popup := Dialog {
+        Rectangle {
+            Text {
+                text: "Unimplemented Feature";
+                padding: 15px;
+            }
+
+            StandardButton {
+                kind: ok;
+                clicked => {
+                    popup_visible = false;
+                }
+                padding: 15px;
+            }
+        }
+
+        visible: popup_visible;
+    }
+}
 
 export component MainWindow inherits Window {
     min-height: 200px;
     min-width: 200px;
     title: "tRust";
+
+    callback show_todo_popup();
+
+    MenuBar {
+        Menu {
+            title: "File";
+            MenuItem {
+                title: "Open Existing Ledger";
+                activated => {
+                    show_todo_popup();
+                }
+            }
+
+            MenuSeparator { }
+        }
+
+        Menu {
+            title: "View";
+            MenuItem {
+                title: "Category Breakdown";
+                activated => {
+                    show_todo_popup();
+                }
+            }
+        }
+    }
 
     GridLayout {
         padding: 10px;
@@ -13,16 +61,19 @@ export component MainWindow inherits Window {
             col: 0;
             row: 0;
         }
+
         Button {
             text: "Button 1";
             col: 0;
             row: 1;
         }
+
         Button {
             text: "Button 1";
             col: 0;
             row: 2;
         }
+
         Text {
             min-width: 16px;
             min-height: 16px;
@@ -32,6 +83,7 @@ export component MainWindow inherits Window {
             rowspan: 3;
             colspan: 3;
         }
+
         Rectangle {
             background: gray;
             row: 3;
