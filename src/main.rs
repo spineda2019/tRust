@@ -27,7 +27,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     /* **************** Real Work + Attempt Loading From Disk *************** */
 
-    let ledger: Ledger = Ledger::new(main_window.as_weak())?;
+    let ledger: Option<Ledger> = Ledger::new(main_window.as_weak());
+
+    if ledger.is_none() {
+        // TODO: file popup
+    }
 
     Ok(main_window.run()?)
 }
