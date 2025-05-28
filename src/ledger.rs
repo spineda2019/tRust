@@ -1,3 +1,20 @@
+//!  Copyright (C) 2024  Sebastian Pineda (spineda.wpi.alum@gmail.com)
+//!
+//!  This program is free software; you can redistribute it and/or modify
+//!  it under the terms of the GNU General Public License as published by
+//!  the Free Software Foundation; either version 3 of the License, or
+//!  (at your option) any later version.
+//!
+//!  This program is distributed in the hope that it will be useful,
+//!  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//!  GNU General Public License for more details.
+//!
+//!  You should have received a copy of the GNU General Public License along
+//!  with this program. If not, see <https://www.gnu.org/licenses/>
+//!
+//!  ledger.rs - internal loading and bookkeeping of a user's ledger
+
 use crate::MainWindow;
 use slint::Weak;
 use std::{
@@ -16,10 +33,8 @@ impl Ledger {
             Ok(ep) => ep,
             _ => return None,
         };
-        let exe_dir: &Path = match exe_path.parent() {
-            Some(parent) => parent,
-            None => return None,
-        };
+
+        let exe_dir: &Path = exe_path.parent()?;
         let conf_path: PathBuf = exe_dir.join("trust.toml");
 
         let file: File = match File::open(conf_path) {
