@@ -20,6 +20,7 @@ slint::include_modules!();
 mod ledger;
 
 use ledger::Ledger;
+use native_dialog::{DialogBuilder, FileDialogBuilder};
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -48,6 +49,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     if ledger.is_none() {
         // TODO: file popup
+        let new_ledger = DialogBuilder::file()
+            .add_filter("tRust Ledger", ["ledger", "toml"])
+            .open_single_file()
+            .show()?;
     }
 
     Ok(main_window.run()?)
