@@ -1,0 +1,14 @@
+accepted = [
+    "GPL-3.0",                        # Ol' reliable
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "MIT",                            # AKA Expat license
+    "Unicode-3.0",
+    "MPL-2.0",                        # Mozilla Public License
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "Zlib",
+    "ISC",
+    "NCSA",
+    "BSL-1.0",                        # Boost Public License
+]
