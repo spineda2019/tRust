@@ -15,7 +15,7 @@
 //!
 //!  ledger.rs - internal loading and bookkeeping of a user's ledger
 
-use crate::MainWindow;
+use crate::{fatal::fatal_panic, MainWindow};
 use slint::Weak;
 use std::{
     fs::File,
@@ -46,5 +46,18 @@ impl Ledger {
             main_window_handle: weak_handle,
             backing_file: file,
         })
+    }
+
+    // Fallback
+    pub fn with_file(weak_handle: Weak<MainWindow>, conf_path: PathBuf) -> Ledger {
+        let file: File = match File::open(conf_path) {
+            Ok(f) => f,
+            Err(e) => fatal_panic(Box::new(e)),
+        };
+
+        Ledger {
+            main_window_handle: weak_handle,
+            backing_file: file,
+        }
     }
 }
