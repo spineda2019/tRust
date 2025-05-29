@@ -17,37 +17,6 @@
 
 import { Button, StandardButton } from "std-widgets.slint";
 
-export component FatalErrorPopup inherits Window {
-    height: 150px;
-    title: "Fatal Error";
-    in property <string> error_message;
-    error_message: "Error: ";
-
-    GridLayout {
-        spacing: 15px;
-        padding: 50px;
-
-        Text {
-            text: "A fatal error occured during an operation.";
-            color: black;
-            row: 0;
-            rowspan: 2;
-            colspan: 2;
-            horizontal-alignment: center;
-            vertical-alignment: center;
-        }
-        Text {
-            text: error_message;
-            color: black;
-            row: 1;
-            rowspan: 2;
-            colspan: 2;
-            horizontal-alignment: center;
-            vertical-alignment: center;
-        }
-    }
-}
-
 export component MissingConfigPopup inherits Window {
     height: 150px;
     title: "Could not find trust.ledger";

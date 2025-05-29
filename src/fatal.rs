@@ -6,19 +6,21 @@ use std::{
     ops::Deref,
 };
 
+use native_dialog::DialogBuilder;
+
 /// This function will only be run in situations when an unrecoverable UI error
 /// occurs. For example, if a config file is missing and attempts to load a
 /// new or user-selected file also fail. This function displays a visual error
 /// and exits the whole process.
 pub fn fatal_panic(error: Box<dyn Error>) -> ! {
     let message: String = format!("Error: {}", error.deref());
-    let message_box: FatalErrorPopup = match FatalErrorPopup::new() {
-        Ok(popup) => popup,
-        _ => std::process::exit(1), // literally just give up
-    };
-    message_box.set_error_message(message.into());
-    let _ = message_box.run();
-    std::process::exit(1)
+    let _ = DialogBuilder::message()
+        .set_level(native_dialog::MessageLevel::Error)
+        .set_title("Fatal Error")
+        .set_text(message)
+        .alert()
+        .show();
+    std::process::exit(1);
 }
 
 #[derive(Debug)]
@@ -38,7 +40,7 @@ impl Display for SourceLocation {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "File: {}\nLine: {}\nColumn{}\n",
+            "File: {}\nLine: {}\nColumn: {}\n",
             self.file, self.line, self.column
         )
     }
