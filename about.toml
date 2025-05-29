@@ -12,3 +12,14 @@ accepted = [
     "NCSA",
     "BSL-1.0",                        # Boost Public License
 ]
+
+# Scan only what tRust is using. Downstream dependencies complying with their
+# licenses should be their responsonilty.
+ignore-transitive-dependencies = true
+
+# Build dependencies are not shipped as part of the actual software binary. As
+# such, they don't need to be attributed since we're not distributing any
+# modified versions of these crates (even linking). This is only really to slim
+# down the NOTICES file. In the astronomically rare case where people want this
+# on, I will happily do so.
+ignore-build-dependencies = true
