@@ -52,6 +52,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     if ledger.is_none() {
         let missing_popup: MissingConfigPopup = MissingConfigPopup::new()?;
         let weak_handle = main_window.as_weak();
+        let popup_handle = missing_popup.as_weak();
         missing_popup.on_make_new_ledger(move || {
             let new_file: Option<PathBuf> = match DialogBuilder::file()
                 .add_filter("tRust Ledger", ["ledger", "toml"])
@@ -74,10 +75,27 @@ fn main() -> Result<(), Box<dyn Error>> {
                 }
             };
 
+            let _ = weak_handle;
+            match popup_handle.upgrade() {
+                Some(handle) => {
+                    if let Err(e) = handle.hide() {
+                        fatal_panic(Box::new(e));
+                    }
+                }
+                None => {
+                    let message: String =
+                        "Tried to access popup handle, but failed to do so".to_string();
+                    let source_location: SourceLocation =
+                        SourceLocation::new(file!(), line!(), column!());
+                    let error: TrustError = TrustError::new(message, source_location);
+                    fatal_panic(Box::new(error));
+                }
+            }
             // ledger = Some(Ledger::with_file(weak_handle, new_file));
         });
 
         let weak_handle = missing_popup.as_weak();
+        let popup_handle = missing_popup.as_weak();
         missing_popup.on_load_file_picker(move || {
             let new_file: Option<PathBuf> = match DialogBuilder::file()
                 .add_filter("tRust Ledger", ["ledger", "toml"])
@@ -100,6 +118,22 @@ fn main() -> Result<(), Box<dyn Error>> {
                 }
             };
 
+            let _ = weak_handle;
+            match popup_handle.upgrade() {
+                Some(handle) => {
+                    if let Err(e) = handle.hide() {
+                        fatal_panic(Box::new(e));
+                    }
+                }
+                None => {
+                    let message: String =
+                        "Tried to access popup handle, but failed to do so".to_string();
+                    let source_location: SourceLocation =
+                        SourceLocation::new(file!(), line!(), column!());
+                    let error: TrustError = TrustError::new(message, source_location);
+                    fatal_panic(Box::new(error));
+                }
+            }
             // ledger = Some(Ledger::with_file(weak_handle, new_file));
         });
 
