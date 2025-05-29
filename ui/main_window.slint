@@ -17,6 +17,54 @@
 
 import { Button, StandardButton } from "std-widgets.slint";
 
+export component MissingConfigPopup inherits Window {
+    height: 150px;
+    in-out property <bool> popup_visible;
+    callback hide_todo_popup();
+    title: "Could not find trust.ledger";
+
+    GridLayout {
+        spacing: 15px;
+        padding: 50px;
+
+        Text {
+            text: "Could not find a valid trust.ledger (or other) file.";
+            color: black;
+            row: 0;
+            rowspan: 2;
+            colspan: 2;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+        Text {
+            text: "How would you like to proceed?";
+            color: black;
+            row: 1;
+            rowspan: 2;
+            colspan: 2;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+
+        Button {
+            text: "Open Existing...";
+            row: 3;
+            col: 0;
+            clicked => {
+                hide_todo_popup();
+            }
+        }
+        Button {
+            text: "New Ledger...";
+            row: 3;
+            col: 1;
+            clicked => {
+                hide_todo_popup();
+            }
+        }
+    }
+}
+
 export component TodoPopup inherits Window {
     height: 150px;
     in-out property <bool> popup_visible;
