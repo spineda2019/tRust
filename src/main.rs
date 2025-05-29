@@ -17,11 +17,13 @@
 
 slint::include_modules!();
 
+mod fatal;
 mod ledger;
 
+use fatal::{fatal_panic, SourceLocation, TrustError};
 use ledger::Ledger;
-use native_dialog::{DialogBuilder, FileDialogBuilder};
-use std::error::Error;
+use native_dialog::DialogBuilder;
+use std::{error::Error, path::PathBuf};
 
 fn main() -> Result<(), Box<dyn Error>> {
     /* ******************** Up Front Window Construction ******************** */
@@ -45,14 +47,63 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     /* **************** Real Work + Attempt Loading From Disk *************** */
 
-    let ledger: Option<Ledger> = Ledger::new(main_window.as_weak());
+    let mut ledger: Option<Ledger> = Ledger::new(main_window.as_weak());
 
     if ledger.is_none() {
-        // TODO: file popup
-        let new_ledger = DialogBuilder::file()
-            .add_filter("tRust Ledger", ["ledger", "toml"])
-            .open_single_file()
-            .show()?;
+        let missing_popup: MissingConfigPopup = MissingConfigPopup::new()?;
+        let weak_handle = main_window.as_weak();
+        missing_popup.on_make_new_ledger(move || {
+            let new_file: Option<PathBuf> = match DialogBuilder::file()
+                .add_filter("tRust Ledger", ["ledger", "toml"])
+                .save_single_file()
+                .show()
+            {
+                Ok(maybe_path) => maybe_path,
+                Err(e) => fatal_panic(Box::new(e)),
+            };
+
+            let new_file: PathBuf = match new_file {
+                Some(file) => file,
+                None => {
+                    let message: String =
+                        "Tried to save a file, but could not resolve its path".to_string();
+                    let source_location: SourceLocation =
+                        SourceLocation::new(file!(), line!(), column!());
+                    let error: TrustError = TrustError::new(message, source_location);
+                    fatal_panic(Box::new(error));
+                }
+            };
+
+            // ledger = Some(Ledger::with_file(weak_handle, new_file));
+        });
+
+        let weak_handle = missing_popup.as_weak();
+        missing_popup.on_load_file_picker(move || {
+            let new_file: Option<PathBuf> = match DialogBuilder::file()
+                .add_filter("tRust Ledger", ["ledger", "toml"])
+                .save_single_file()
+                .show()
+            {
+                Ok(maybe_path) => maybe_path,
+                Err(e) => fatal_panic(Box::new(e)),
+            };
+
+            let new_file: PathBuf = match new_file {
+                Some(file) => file,
+                None => {
+                    let message: String =
+                        "Tried to save a file, but could not resolve its path".to_string();
+                    let source_location: SourceLocation =
+                        SourceLocation::new(file!(), line!(), column!());
+                    let error: TrustError = TrustError::new(message, source_location);
+                    fatal_panic(Box::new(error));
+                }
+            };
+
+            // ledger = Some(Ledger::with_file(weak_handle, new_file));
+        });
+
+        missing_popup.run()?; // will block until user selects option
     }
 
     Ok(main_window.run()?)
